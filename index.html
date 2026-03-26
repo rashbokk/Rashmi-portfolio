@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rashmi Bokkasada - Product Manager specializing in B2B SaaS, Healthcare Technology, and Data-Driven Strategies">
+    <meta name="keywords" content="Product Manager, B2B SaaS, Healthcare Tech, CSPO, Agile, Data-Driven Product Strategy">
+    <meta name="author" content="Rashmi Bokkasada">
+    <title>Rashmi Bokkasada | Product Manager</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 20px;
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #3498db;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero .title {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.95;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 0 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 80px 0;
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        section h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: #3498db;
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about-content {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-item i {
+            color: #3498db;
+            font-size: 1.2rem;
+        }
+
+        /* Experience Section */
+        .experience-item {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-left: 4px solid #3498db;
+        }
+
+        .experience-item h3 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .experience-item .company {
+            color: #3498db;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .experience-item .duration {
+            color: #777;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .experience-item ul {
+            margin-left: 20px;
+        }
+
+        .experience-item li {
+            margin-bottom: 0.8rem;
+            color: #555;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-card .project-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+        }
+
+        .project-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-card .project-date {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .project-card .project-body {
+            padding: 25px;
+        }
+
+        .project-card p {
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .project-link {
+            display: inline-block;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .project-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Skills Section */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .skill-category {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .skill-category h3 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .skill-category h3 i {
+            color: #3498db;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            background: #e8f4f8;
+            color: #2c3e50;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Certifications */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .cert-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .cert-card i {
+            font-size: 3rem;
+            color: #3498db;
+            margin-bottom: 1rem;
+        }
+
+        .cert-card h3 {
+            color: #2c3e50;
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        footer .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        footer .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        footer .social-links a:hover {
+            color: #3498db;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #2c3e50;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .title {
+                font-size: 1rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">Rashmi B.</div>
+            <button class="mobile-menu-btn" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul id="navMenu">
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#certifications">Certifications</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Rashmi Bokkasada</h1>
+            <p class="title">Product Manager (CSPO) | Agile Methodologies | Data-Driven Strategies | User-Centered Design</p>
+            <p>Results-driven Product Manager with extensive experience in B2B SaaS, tracking, analytics, and healthcare technology. Adept at defining product roadmaps, managing cross-functional teams, and leveraging data-driven insights to optimize user experiences.</p>
+            <div>
+                <a href="#contact" class="btn">Get in Touch</a>
+                <a href="#" class="btn btn-secondary" onclick="downloadCV()">Download CV</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <h2>About Me</h2>
+            <div class="about-content">
+                <p>I'm a results-driven Product Manager with extensive experience in B2B SaaS, healthcare technology, and data analytics. My expertise lies in defining product roadmaps, managing cross-functional teams, and leveraging data-driven insights to optimize user experiences and drive business growth.</p>
+                <p>With a strong background in Agile methodologies and user-centered design, I've successfully led multiple product initiatives that have reduced operational inefficiencies, increased customer adoption, and delivered significant revenue impact. I'm passionate about solving complex problems and creating products that make a meaningful difference in healthcare technology.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+91 9945545455</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>Rashmi.sb@gmail.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Bengaluru, India</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" style="background: white;">
+        <div class="container">
+            <h2>Professional Experience</h2>
+            
+            <div class="experience-item">
+                <h3>Product Manager</h3>
+                <div class="company">HealthEdge</div>
+                <div class="duration">2019 – Present</div>
+                <ul>
+                    <li>Defined and executed product strategy aligning business goals with user needs, driving measurable impact across multiple product lines</li>
+                    <li>Led integration of HealthRules connector APIs (837, 270, 276) for EDI transactions, streamlining healthcare data exchange</li>
+                    <li>Delivered critical compliance projects including AEOB and BlueCard workflows, ensuring regulatory adherence</li>
+                    <li>Reduced product incident turnaround time by 60% through process optimization and cross-functional collaboration</li>
+                    <li>Expanded customer base by 20% through strategic product enhancements and customer-centric feature development</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <h3>Project Manager</h3>
+                <div class="company">Cerner Healthcare Solutions</div>
+                <div class="duration">2015 – 2018</div>
+                <ul>
+                    <li>Led Agile ceremonies and mentored teams on continuous improvement practices, fostering high-performance culture</li>
+                    <li>Successfully delivered multiple healthcare technology projects for NHS and US markets, meeting stringent quality standards</li>
+                    <li>Strengthened EHR solution stability through systematic process improvements and quality assurance initiatives</li>
+                    <li>Trained and developed junior team members, building organizational capability and knowledge transfer</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="container">
+            <h2>Key Projects & POCs</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Service Authorization Upgrade</h3>
+                        <div class="project-date">2023 – 2024</div>
+                    </div>
+                    <div class="project-body">
+                        <p>Led comprehensive upgrade of service authorization workflows, implementing enhanced payer features that reduced claim denials by 10% and improved overall authorization efficiency.</p>
+                        <a href="#" class="project-link" onclick="showDemo('auth')">View Project Details <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Reinsurer MVP</h3>
+                        <div class="project-date">2023 – 2024</div>
+                    </div>
+                    <div class="project-body">
+                        <p>Delivered minimum viable product that enabled onboarding of ASO (Administrative Services Only) customers, opening new revenue streams and expanding market reach.</p>
+                        <a href="#" class="project-link" onclick="showDemo('reinsurer')">View Prototype <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>AI Integration for Claims Management</h3>
+                        <div class="project-date">2024</div>
+                    </div>
+                    <div class="project-body">
+                        <p>Led pilot program to integrate AI bot with HealthRules Platform for automated claims management, collaborating closely with data science and UX teams to optimize user experience.</p>
+                        <a href="#" class="project-link" onclick="showDemo('ai')">View AI Demo <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" style="background: white;">
+        <div class="container">
+            <h2>Skills & Expertise</h2>
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3><i class="fas fa-tasks"></i> Product Management</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Product Roadmap</span>
+                        <span class="skill-tag">Agile/Scrum</span>
+                        <span class="skill-tag">Market Research</span>
+                        <span class="skill-tag">Data Analysis</span>
+                        <span class="skill-tag">Stakeholder Management</span>
+                        <span class="skill-tag">Team Leadership</span>
+                        <span class="skill-tag">UI/UX Collaboration</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3><i class="fas fa-code"></i> Tools & Technologies</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">JIRA</span>
+                        <span class="skill-tag">Confluence</span>
+                        <span class="skill-tag">Figma</span>
+                        <span class="skill-tag">Azure</span>
+                        <span class="skill-tag">Mixpanel</span>
+                        <span class="skill-tag">Tableau</span>
+                        <span class="skill-tag">Slack</span>
+                        <span class="skill-tag">Google Workspace</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3><i class="fas fa-industry"></i> Domain Expertise</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">B2B SaaS</span>
+                        <span class="skill-tag">Healthcare Technology</span>
+                        <span class="skill-tag">EDI Integration</span>
+                        <span class="skill-tag">Analytics Platforms</span>
+                        <span class="skill-tag">Compliance Management</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications">
+        <div class="container">
+            <h2>Certifications</h2>
+            <div class="cert-grid">
+                <div class="cert-card">
+                    <i class="fas fa-certificate"></i>
+                    <h3>Certified Scrum Product Owner</h3>
+                    <p>(CSPO)</p>
+                </div>
+                <div class="cert-card">
+                    <i class="fas fa-award"></i>
+                    <h3>PMI Agile Certified Practitioner</h3>
+                    <p>(PMI-ACP)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" style="background: white;">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <div class="about-content" style="text-align: center;">
+                <p>I'm always interested in hearing about new opportunities, collaborations, or just connecting with fellow product enthusiasts. Feel free to reach out!</p>
+                <div class="contact-info" style="justify-content: center; margin-top: 2rem;">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+91 9945545455</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:Rashmi.sb@gmail.com" style="color: #555; text-decoration: none;">Rashmi.sb@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/yourprofile" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="mailto:Rashmi.sb@gmail.com"><i class="fas fa-envelope"></i></a>
+                <a href="tel:+919945545455"><i class="fas fa-phone"></i></a>
+            </div>
+            <p>&copy; 2025 Rashmi Bokkasada. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+
+        function downloadCV() {
+            alert('CV download will be implemented. Please add your CV file to the project directory and update this function with the correct file path.');
+            // window.location.href = 'path-to-your-cv.pdf';
+        }
+
+        function showDemo(project) {
+            const messages = {
+                auth: 'Service Authorization Upgrade demo will open here. Please add your demo link or prototype.',
+                reinsurer: 'Reinsurer MVP prototype will open here. Please add your prototype link.',
+                ai: 'AI Integration demo will open here. Please add your demo link or video.'
+            };
+            alert(messages[project]);
+            // For actual implementation, replace with:
+            // window.open('your-demo-url', '_blank');
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    document.getElementById('navMenu').classList.remove('active');
+                }
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const nav = document.querySelector('nav');
+            const menu = document.getElementById('navMenu');
+            if (!nav.contains(e.target) && menu.classList.contains('active')) {
+                menu.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
