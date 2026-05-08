@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BillCheck AI — Healthcare Bill Auditor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #F5F2EC;
+  --bg2: #EDE9E0;
+  --bg3: #E4DFD4;
+  --ink: #1A1814;
+  --ink2: #3D3A34;
+  --ink3: #7A7670;
+  --teal: #0B7B82;
+  --teal2: #0EA5B0;
+  --teal-light: rgba(11,123,130,0.1);
+  --red: #C0392B;
+  --red-light: rgba(192,57,43,0.1);
+  --amber: #D4820A;
+  --amber-light: rgba(212,130,10,0.1);
+  --green: #1A7A4A;
+  --green-light: rgba(26,122,74,0.1);
+  --border: rgba(26,24,20,0.12);
+  --radius: 14px;
+  --shadow: 0 2px 16px rgba(26,24,20,0.08);
+  --shadow-lg: 0 8px 48px rgba(26,24,20,0.14);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh;overflow-x:hidden}
+
+/* ── HEADER ── */
+header{
+  background:var(--ink);color:#F5F2EC;
+  padding:0 5%;display:flex;align-items:center;justify-content:space-between;
+  height:60px;position:sticky;top:0;z-index:200;
+}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.logo-icon{
+  width:32px;height:32px;background:var(--teal);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.logo-text{font-family:'Instrument Serif',serif;font-size:1.2rem;letter-spacing:-.3px}
+.logo-text span{color:var(--teal2)}
+.header-badge{
+  font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  background:rgba(14,165,176,0.2);color:var(--teal2);
+  border:1px solid rgba(14,165,176,0.3);border-radius:20px;padding:4px 12px;
+}
+.back-link{
+  color:rgba(245,242,236,0.6);font-size:13px;text-decoration:none;
+  display:flex;align-items:center;gap:6px;transition:color .2s;
+}
+.back-link:hover{color:#F5F2EC}
+
+/* ── HERO ── */
+.hero{
+  background:var(--ink);color:#F5F2EC;
+  padding:60px 5% 80px;text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle at 30% 50%, rgba(11,123,130,0.15) 0%, transparent 50%),
+                   radial-gradient(circle at 70% 30%, rgba(14,165,176,0.1) 0%, transparent 45%);
+}
+.hero-label{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(14,165,176,0.15);border:1px solid rgba(14,165,176,0.3);
+  border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;
+  color:var(--teal2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:20px;
+}
+.hero-dot{width:6px;height:6px;background:var(--teal2);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{
+  font-family:'Instrument Serif',serif;font-size:clamp(2.4rem,6vw,4rem);
+  font-weight:400;line-height:1.1;margin-bottom:16px;position:relative;
+}
+.hero h1 em{color:var(--teal2);font-style:italic}
+.hero p{
+  color:rgba(245,242,236,0.65);font-size:16px;max-width:520px;
+  margin:0 auto 40px;line-height:1.7;position:relative;
+}
+.market-pills{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;position:relative}
+.market-pill{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(245,242,236,0.08);border:1px solid rgba(245,242,236,0.15);
+  border-radius:30px;padding:8px 18px;font-size:13px;font-weight:500;
+  color:rgba(245,242,236,0.8);
+}
+.market-pill span{font-size:16px}
+
+/* ── TABS ── */
+.tabs-wrapper{
+  max-width:900px;margin:-28px auto 0;position:relative;z-index:10;padding:0 5%;
+}
+.tabs{
+  background:var(--ink2);border-radius:12px;padding:6px;
+  display:grid;grid-template-columns:1fr 1fr;gap:4px;
+  box-shadow:var(--shadow-lg);
+}
+.tab-btn{
+  padding:14px 24px;border:none;border-radius:8px;
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .25s;color:rgba(245,242,236,0.5);
+  background:transparent;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.tab-btn.active{background:var(--teal);color:#fff;box-shadow:0 4px 16px rgba(11,123,130,0.4)}
+.tab-btn:not(.active):hover{color:rgba(245,242,236,0.8)}
+
+/* ── MAIN CONTENT ── */
+.main{max-width:900px;margin:0 auto;padding:40px 5% 80px}
+
+/* ── PANEL ── */
+.panel{display:none;animation:fadeIn .3s ease}
+.panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── MARKET SELECTOR ── */
+.market-select-row{
+  display:flex;align-items:center;gap:12px;margin-bottom:28px;flex-wrap:wrap;
+}
+.market-select-row label{font-size:13px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px}
+.market-toggle{display:flex;gap:6px}
+.mkt-btn{
+  padding:7px 18px;border-radius:8px;border:1.5px solid var(--border);
+  background:white;font-size:13px;font-weight:600;cursor:pointer;
+  transition:all .2s;color:var(--ink3);font-family:'DM Sans',sans-serif;
+}
+.mkt-btn.active{background:var(--ink);color:#F5F2EC;border-color:var(--ink)}
+
+/* ── UPLOAD ZONE ── */
+.upload-zone{
+  border:2px dashed var(--border);border-radius:var(--radius);
+  background:white;padding:48px 32px;text-align:center;
+  cursor:pointer;transition:all .25s;position:relative;overflow:hidden;
+  margin-bottom:24px;
+}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--teal);background:var(--teal-light)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{
+  width:56px;height:56px;background:var(--bg2);border-radius:14px;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 16px;
+  font-size:26px;transition:transform .2s;
+}
+.upload-zone:hover .upload-icon{transform:scale(1.08)}
+.upload-title{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.upload-sub{font-size:13px;color:var(--ink3)}
+.upload-formats{
+  display:flex;justify-content:center;gap:8px;margin-top:16px;flex-wrap:wrap;
+}
+.fmt-tag{
+  background:var(--bg2);color:var(--ink3);font-size:11px;font-weight:600;
+  padding:3px 10px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;
+}
+
+/* ── SAMPLE TRIGGER ── */
+.sample-row{text-align:center;margin-bottom:28px}
+.sample-btn{
+  background:transparent;border:1.5px solid var(--border);border-radius:8px;
+  padding:10px 22px;font-size:13px;font-weight:600;color:var(--ink3);
+  cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.sample-btn:hover{border-color:var(--teal);color:var(--teal)}
+
+/* ── PROGRESS ── */
+.progress-wrap{display:none;margin-bottom:24px}
+.progress-wrap.show{display:block}
+.progress-card{
+  background:white;border-radius:var(--radius);padding:24px 28px;
+  border:1px solid var(--border);box-shadow:var(--shadow);
+}
+.progress-title{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.spinner{
+  width:18px;height:18px;border:2.5px solid var(--border);
+  border-top-color:var(--teal);border-radius:50%;
+  animation:spin .8s linear infinite;flex-shrink:0;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.progress-steps{display:flex;flex-direction:column;gap:10px}
+.prog-step{
+  display:flex;align-items:center;gap:12px;font-size:13px;color:var(--ink3);
+  padding:8px 12px;border-radius:8px;background:var(--bg);transition:all .3s;
+}
+.prog-step.done{color:var(--green);background:var(--green-light)}
+.prog-step.active{color:var(--teal);background:var(--teal-light);font-weight:600}
+.prog-step-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.prog-bar-wrap{margin-top:16px;height:4px;background:var(--bg2);border-radius:2px;overflow:hidden}
+.prog-bar{height:100%;background:var(--teal);border-radius:2px;width:0%;transition:width .5s ease}
+
+/* ── RESULTS AREA ── */
+.results-wrap{display:none}
+.results-wrap.show{display:block;animation:fadeIn .4s ease}
+
+/* ── SUMMARY BANNER ── */
+.summary-banner{
+  border-radius:var(--radius);padding:28px 32px;margin-bottom:24px;
+  display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;
+}
+.summary-banner.savings{background:linear-gradient(135deg,#0B7B82,#0A5F65);color:white}
+.summary-banner.insight{background:linear-gradient(135deg,#1A1814,#2D2A24);color:#F5F2EC}
+.banner-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.7;margin-bottom:4px}
+.banner-title{font-family:'Instrument Serif',serif;font-size:1.8rem;font-weight:400;line-height:1.2}
+.banner-sub{font-size:13px;opacity:.75;margin-top:6px}
+.banner-stat{text-align:right}
+.banner-num{font-family:'Instrument Serif',serif;font-size:2.8rem;line-height:1}
+.banner-num-label{font-size:12px;opacity:.65;margin-top:4px}
+
+/* ── SECTION HEADER ── */
+.sect-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;flex-wrap:wrap;gap:10px;
+}
+.sect-title{font-size:15px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px}
+.sect-title-icon{
+  width:28px;height:28px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;
+}
+.icon-red{background:var(--red-light);color:var(--red)}
+.icon-amber{background:var(--amber-light);color:var(--amber)}
+.icon-green{background:var(--green-light);color:var(--green)}
+.icon-teal{background:var(--teal-light);color:var(--teal)}
+.count-badge{
+  font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;
+}
+.badge-red{background:var(--red-light);color:var(--red)}
+.badge-amber{background:var(--amber-light);color:var(--amber)}
+.badge-green{background:var(--green-light);color:var(--green)}
+
+/* ── LINE ITEM CARDS ── */
+.line-items{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.line-card{
+  background:white;border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;transition:box-shadow .2s;
+}
+.line-card:hover{box-shadow:var(--shadow)}
+.line-card-header{
+  display:grid;grid-template-columns:auto 1fr auto auto;
+  gap:14px;align-items:center;padding:16px 20px;cursor:pointer;
+}
+.line-flag{
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;
+}
+.flag-red{background:var(--red)}
+.flag-amber{background:var(--amber)}
+.flag-green{background:#ccc}
+.line-info{}
+.line-desc{font-size:14px;font-weight:600;color:var(--ink)}
+.line-meta{font-size:12px;color:var(--ink3);margin-top:2px;font-family:'JetBrains Mono',monospace}
+.line-amount{font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap}
+.line-amount.struck{text-decoration:line-through;color:var(--ink3);font-weight:400}
+.line-status{
+  font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;
+  white-space:nowrap;
+}
+.status-dup{background:var(--red-light);color:var(--red)}
+.status-flag{background:var(--amber-light);color:var(--amber)}
+.status-ok{background:var(--green-light);color:var(--green)}
+.line-card-detail{
+  border-top:1px solid var(--border);padding:14px 20px;
+  background:var(--bg);display:none;
+}
+.line-card-detail.open{display:block}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.detail-item label{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:3px}
+.detail-item span{font-size:13px;font-weight:500;color:var(--ink)}
+.detail-reason{
+  background:white;border-radius:8px;padding:12px 14px;
+  font-size:13px;color:var(--ink2);border-left:3px solid var(--amber);
+  margin-bottom:12px;
+}
+.detail-reason.reason-red{border-color:var(--red)}
+.confidence-row{display:flex;align-items:center;gap:10px}
+.conf-label{font-size:12px;color:var(--ink3);font-weight:600;white-space:nowrap}
+.conf-bar-wrap{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.conf-bar{height:100%;border-radius:3px;transition:width 1s ease}
+.conf-high{background:var(--green)}
+.conf-med{background:var(--amber)}
+.conf-pct{font-size:12px;font-weight:700;color:var(--ink2);font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.action-row{display:flex;gap:8px;margin-top:12px}
+.act-btn{
+  padding:7px 16px;border-radius:8px;font-size:12px;font-weight:700;
+  cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;border:none;
+}
+.act-accept{background:var(--red-light);color:var(--red)}
+.act-accept:hover{background:var(--red);color:white}
+.act-keep{background:var(--green-light);color:var(--green)}
+.act-keep:hover{background:var(--green);color:white}
+.act-neutral{background:var(--bg3);color:var(--ink3)}
+.act-neutral:hover{background:var(--bg2);color:var(--ink)}
+
+/* ── TOTALS TABLE ── */
+.totals-card{
+  background:white;border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;margin-bottom:28px;
+}
+.totals-row{
+  display:grid;grid-template-columns:1fr auto auto;
+  gap:16px;padding:14px 20px;border-bottom:1px solid var(--border);
+  align-items:center;font-size:14px;
+}
+.totals-row:last-child{border-bottom:none;background:var(--bg)}
+.totals-row.total-final{font-weight:700;font-size:15px}
+.totals-row.savings-row{color:var(--green);font-weight:700}
+.t-label{color:var(--ink2)}
+.t-orig{color:var(--ink3);text-decoration:line-through;font-family:'JetBrains Mono',monospace;font-size:13px}
+.t-new{font-family:'JetBrains Mono',monospace;color:var(--ink)}
+
+/* ── ACTION BUTTONS ── */
+.action-bar{
+  display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px;
+}
+.btn-dl{
+  flex:1;min-width:180px;padding:14px 24px;border-radius:10px;
+  font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;
+  font-family:'DM Sans',sans-serif;border:none;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-dl.primary{background:var(--teal);color:white}
+.btn-dl.primary:hover{background:var(--teal2);transform:translateY(-1px)}
+.btn-dl.secondary{background:white;color:var(--ink);border:1.5px solid var(--border)}
+.btn-dl.secondary:hover{border-color:var(--teal);color:var(--teal)}
+
+/* ── INSURANCE EXPLAINER ── */
+.policy-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+@media(max-width:640px){.policy-grid{grid-template-columns:1fr}}
+.coverage-card{
+  background:white;border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;transition:box-shadow .2s;
+}
+.coverage-card:hover{box-shadow:var(--shadow)}
+.cov-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.cov-title{font-size:15px;font-weight:700;color:var(--ink)}
+.cov-status{font-size:11px;font-weight:800;padding:5px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.cov-covered{background:var(--green-light);color:var(--green)}
+.cov-partial{background:var(--amber-light);color:var(--amber)}
+.cov-not{background:var(--red-light);color:var(--red)}
+.cov-auth{background:var(--teal-light);color:var(--teal)}
+.cov-desc{font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:14px}
+.cov-estimate{
+  background:var(--bg);border-radius:8px;padding:10px 14px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.cov-est-label{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px}
+.cov-est-val{font-size:15px;font-weight:700;color:var(--ink);font-family:'JetBrains Mono',monospace}
+
+/* ── POLICY LIMITS ── */
+.limits-card{
+  background:white;border:1px solid var(--border);border-radius:var(--radius);
+  padding:24px;margin-bottom:24px;
+}
+.limits-title{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.limit-rows{display:flex;flex-direction:column;gap:12px}
+.limit-row{display:flex;align-items:center;gap:16px}
+.limit-label{font-size:13px;font-weight:600;color:var(--ink2);min-width:160px}
+.limit-bar-wrap{flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.limit-bar-fill{height:100%;border-radius:4px;transition:width 1.2s ease}
+.limit-vals{font-size:12px;color:var(--ink3);font-family:'JetBrains Mono',monospace;white-space:nowrap}
+
+/* ── NEXT STEPS ── */
+.steps-card{
+  background:var(--ink);color:#F5F2EC;
+  border-radius:var(--radius);padding:28px;margin-bottom:28px;
+}
+.steps-title{font-family:'Instrument Serif',serif;font-size:1.3rem;margin-bottom:20px;color:#F5F2EC}
+.step-items{display:flex;flex-direction:column;gap:12px}
+.step-item{
+  display:flex;align-items:flex-start;gap:14px;
+  background:rgba(245,242,236,0.06);border-radius:10px;padding:14px 16px;
+  border:1px solid rgba(245,242,236,0.08);
+}
+.step-num{
+  width:26px;height:26px;background:var(--teal);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;color:white;flex-shrink:0;margin-top:1px;
+}
+.step-text{font-size:13px;color:rgba(245,242,236,0.8);line-height:1.6}
+.step-text strong{color:#F5F2EC}
+
+/* ── COVERAGE SCORE ── */
+.score-ring-wrap{
+  display:flex;flex-direction:column;align-items:center;
+  padding:28px;background:white;border:1px solid var(--border);
+  border-radius:var(--radius);margin-bottom:24px;
+}
+.score-ring-title{font-size:15px;font-weight:700;margin-bottom:20px}
+.score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%}
+.score-item{text-align:center}
+.score-circle{
+  width:72px;height:72px;border-radius:50%;margin:0 auto 10px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Instrument Serif',serif;font-size:1.4rem;font-weight:400;
+  position:relative;
+}
+.sc-high{background:var(--green-light);color:var(--green);border:3px solid var(--green)}
+.sc-med{background:var(--amber-light);color:var(--amber);border:3px solid var(--amber)}
+.sc-low{background:var(--red-light);color:var(--red);border:3px solid var(--red)}
+.score-item-label{font-size:12px;font-weight:600;color:var(--ink2)}
+.score-item-sub{font-size:11px;color:var(--ink3);margin-top:2px}
+
+/* ── DISCLAIMER ── */
+.disclaimer{
+  background:var(--amber-light);border:1px solid rgba(212,130,10,0.25);
+  border-radius:10px;padding:14px 18px;
+  font-size:12px;color:var(--amber);line-height:1.6;margin-bottom:28px;
+  display:flex;gap:10px;align-items:flex-start;
+}
+.disclaimer svg{flex-shrink:0;margin-top:1px}
+
+/* ── EMPTY STATE ── */
+.empty-state{
+  text-align:center;padding:60px 24px;color:var(--ink3);
+}
+.empty-icon{font-size:48px;margin-bottom:16px}
+.empty-title{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.empty-sub{font-size:14px;max-width:360px;margin:0 auto}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--border);margin:32px 0}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .header-badge{display:none}
+  .line-card-header{grid-template-columns:auto 1fr auto;gap:10px}
+  .line-status{display:none}
+  .banner-stat{display:none}
+  .summary-banner{grid-template-columns:1fr}
+  .detail-grid{grid-template-columns:1fr}
+  .totals-row{grid-template-columns:1fr auto}
+  .t-orig{display:none}
+  .policy-grid{grid-template-columns:1fr}
+  .score-grid{grid-template-columns:1fr}
+}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:999;
+  background:var(--ink);color:#F5F2EC;border-radius:10px;
+  padding:12px 20px;font-size:13px;font-weight:600;
+  box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;
+  transition:all .3s;display:flex;align-items:center;gap:10px;
+}
+.toast.show{transform:translateY(0);opacity:1}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="back-link">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Back to Portfolio
+  </a>
+  <a href="#" class="logo">
+    <div class="logo-icon">🏥</div>
+    <span class="logo-text">BillCheck <span>AI</span></span>
+  </a>
+  <div class="header-badge">POC Demo</div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label"><span class="hero-dot"></span> Live AI Demo</div>
+  <h1>Your hospital bill,<br/><em>audited by AI</em></h1>
+  <p>Upload any hospital bill or insurance policy. AI cross-references official rate schedules and flags overbilling — instantly.</p>
+  <div class="market-pills">
+    <div class="market-pill"><span>🇮🇳</span> India — CGHS · NPPA · PMJAY</div>
+    <div class="market-pill"><span>🇺🇸</span> US — Medicare · CPT · Surprise Billing</div>
+    <div class="market-pill"><span>🔒</span> Zero PHI retained</div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('bill')">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Bill Audit
+    </button>
+    <button class="tab-btn" onclick="switchTab('insurance')">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Insurance Explainer
+    </button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ══ BILL AUDIT PANEL ══ -->
+  <div id="panel-bill" class="panel active">
+
+    <!-- Market selector -->
+    <div class="market-select-row">
+      <label>Market</label>
+      <div class="market-toggle">
+        <button class="mkt-btn active" onclick="setMarket('IN',this)">🇮🇳 India</button>
+        <button class="mkt-btn" onclick="setMarket('US',this)">🇺🇸 United States</button>
+      </div>
+    </div>
+
+    <!-- Upload -->
+    <div class="upload-zone" id="bill-upload-zone" ondragover="handleDrag(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event,'bill')">
+      <input type="file" accept=".pdf,.jpg,.jpeg,.png,.csv,.xlsx" onchange="handleFileSelect(event,'bill')"/>
+      <div class="upload-icon">📄</div>
+      <div class="upload-title">Drop your hospital bill here</div>
+      <div class="upload-sub">or click to browse your files</div>
+      <div class="upload-formats">
+        <span class="fmt-tag">PDF</span>
+        <span class="fmt-tag">JPG/PNG</span>
+        <span class="fmt-tag">CSV</span>
+        <span class="fmt-tag">Excel</span>
+      </div>
+    </div>
+
+    <div class="sample-row">
+      <button class="sample-btn" onclick="runSampleBill()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Try with sample bill
+      </button>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-wrap" id="bill-progress">
+      <div class="progress-card">
+        <div class="progress-title">
+          <div class="spinner"></div>
+          Analysing your bill…
+        </div>
+        <div class="progress-steps">
+          <div class="prog-step" id="step-ocr"><span class="prog-step-icon">👁️</span> Extracting line items via OCR</div>
+          <div class="prog-step" id="step-codes"><span class="prog-step-icon">🔍</span> Matching CPT / procedure codes</div>
+          <div class="prog-step" id="step-rates"><span class="prog-step-icon">📊</span> Cross-referencing official rate schedules</div>
+          <div class="prog-step" id="step-dupes"><span class="prog-step-icon">⚠️</span> Running duplicate detection engine</div>
+          <div class="prog-step" id="step-report"><span class="prog-step-icon">📝</span> Generating corrected bill report</div>
+        </div>
+        <div class="prog-bar-wrap"><div class="prog-bar" id="bill-prog-bar"></div></div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="results-wrap" id="bill-results"></div>
+
+  </div><!-- /panel-bill -->
+
+  <!-- ══ INSURANCE PANEL ══ -->
+  <div id="panel-insurance" class="panel">
+
+    <div class="market-select-row">
+      <label>Market</label>
+      <div class="market-toggle">
+        <button class="mkt-btn active" onclick="setMarket('IN',this,'ins')">🇮🇳 India</button>
+        <button class="mkt-btn" onclick="setMarket('US',this,'ins')">🇺🇸 United States</button>
+      </div>
+    </div>
+
+    <!-- Two upload zones side by side -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div class="upload-zone" style="padding:32px 20px" id="policy-upload-zone">
+        <input type="file" accept=".pdf,.docx,.txt" onchange="handleFileSelect(event,'policy')"/>
+        <div class="upload-icon" style="width:44px;height:44px;font-size:20px">📋</div>
+        <div class="upload-title" style="font-size:15px">Insurance Policy</div>
+        <div class="upload-sub">PDF or DOCX</div>
+      </div>
+      <div class="upload-zone" style="padding:32px 20px" id="records-upload-zone">
+        <input type="file" accept=".pdf,.jpg,.png" onchange="handleFileSelect(event,'records')"/>
+        <div class="upload-icon" style="width:44px;height:44px;font-size:20px">🩺</div>
+        <div class="upload-title" style="font-size:15px">Medical Records</div>
+        <div class="upload-sub">PDF or Image</div>
+      </div>
+    </div>
+
+    <div class="sample-row">
+      <button class="sample-btn" onclick="runSampleInsurance()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Try with sample policy + records
+      </button>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-wrap" id="ins-progress">
+      <div class="progress-card">
+        <div class="progress-title">
+          <div class="spinner"></div>
+          Analysing your policy and records…
+        </div>
+        <div class="progress-steps">
+          <div class="prog-step" id="ins-step-1"><span class="prog-step-icon">📄</span> Parsing policy document structure</div>
+          <div class="prog-step" id="ins-step-2"><span class="prog-step-icon">🔎</span> Extracting coverage clauses and exclusions</div>
+          <div class="prog-step" id="ins-step-3"><span class="prog-step-icon">🩺</span> Reading your medical diagnoses and conditions</div>
+          <div class="prog-step" id="ins-step-4"><span class="prog-step-icon">🔗</span> Mapping conditions to policy coverage</div>
+          <div class="prog-step" id="ins-step-5"><span class="prog-step-icon">💬</span> Writing plain-language summary</div>
+        </div>
+        <div class="prog-bar-wrap"><div class="prog-bar" id="ins-prog-bar"></div></div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="results-wrap" id="ins-results"></div>
+
+  </div><!-- /panel-insurance -->
+
+</div><!-- /main -->
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let currentMarket = { bill: 'IN', ins: 'IN' };
+let billDecisions = {}; // lineId -> 'removed'|'kept'
+
+// ══════════════════════════════════════════
+//  TAB SWITCH
+// ══════════════════════════════════════════
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', (i===0&&tab==='bill')||(i===1&&tab==='insurance'));
+  });
+  document.getElementById('panel-bill').classList.toggle('active', tab==='bill');
+  document.getElementById('panel-insurance').classList.toggle('active', tab==='insurance');
+}
+
+// ══════════════════════════════════════════
+//  MARKET
+// ══════════════════════════════════════════
+function setMarket(mkt, btn, panel='bill') {
+  currentMarket[panel === 'ins' ? 'ins' : 'bill'] = mkt;
+  const row = btn.closest('.market-toggle');
+  row.querySelectorAll('.mkt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ══════════════════════════════════════════
+//  DRAG & DROP
+// ══════════════════════════════════════════
+function handleDrag(e) { e.preventDefault(); e.currentTarget.classList.add('drag'); }
+function handleDragLeave(e) { e.currentTarget.classList.remove('drag'); }
+function handleDrop(e, type) {
+  e.preventDefault(); e.currentTarget.classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) processFile(file, type);
+}
+function handleFileSelect(e, type) {
+  const file = e.target.files[0];
+  if (file) processFile(file, type);
+}
+function processFile(file, type) {
+  showToast(`📎 "${file.name}" loaded`);
+  if (type === 'bill') runBillAudit(null, file);
+  else runInsuranceExplainer(null);
+}
+
+// ══════════════════════════════════════════
+//  PROGRESS ANIMATOR
+// ══════════════════════════════════════════
+async function animateProgress(stepIds, barId, durations) {
+  const bar = document.getElementById(barId);
+  const steps = stepIds.map(id => document.getElementById(id));
+  for (let i = 0; i < steps.length; i++) {
+    steps[i].classList.add('active');
+    bar.style.width = ((i+1)/steps.length*100) + '%';
+    await sleep(durations[i] || 600);
+    steps[i].classList.remove('active');
+    steps[i].classList.add('done');
+    steps[i].querySelector('.prog-step-icon').textContent = '✓';
+  }
+}
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ══════════════════════════════════════════
+//  CALL CLAUDE API
+// ══════════════════════════════════════════
+async function callClaude(prompt) {
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const text = data.content?.map(c => c.text || '').join('') || '';
+    const clean = text.replace(/```json|```/g, '').trim();
+    return JSON.parse(clean);
+  } catch(e) {
+    return null;
+  }
+}
+
+// ══════════════════════════════════════════
+//  BILL AUDIT — SAMPLE DATA
+// ══════════════════════════════════════════
+const SAMPLE_BILLS = {
+  IN: {
+    provider: 'Apollo Hospitals, Bangalore',
+    patient: 'Priya Sharma (F, 42)',
+    date: '12 April 2025',
+    invoiceNo: 'APL-2025-04112',
+    totalOriginal: 87400,
+    currency: '₹',
+    lines: [
+      { id:'L1', desc:'Consultation – Senior Consultant', code:'CGHS-001', date:'12 Apr', qty:1, unitPrice:1500, total:1500, status:'ok', reason:'', confidence:99 },
+      { id:'L2', desc:'CBC Blood Test', code:'LAB-CBC', date:'12 Apr', qty:1, unitPrice:850, total:850, status:'ok', reason:'', confidence:97 },
+      { id:'L3', desc:'CBC Blood Test', code:'LAB-CBC', date:'12 Apr', qty:1, unitPrice:850, total:850, status:'dup', reason:'Exact duplicate of line 2 — same test (LAB-CBC), same date (12 Apr), same price. Only one CBC per admission is clinically indicated.', confidence:98 },
+      { id:'L4', desc:'Chest X-Ray (PA View)', code:'RAD-CXR', date:'12 Apr', qty:1, unitPrice:900, total:900, status:'ok', reason:'', confidence:96 },
+      { id:'L5', desc:'Nebulisation Charges', code:'PROC-NEB', date:'12–14 Apr', qty:12, unitPrice:450, total:5400, status:'flag', reason:'Quantity of 12 sessions seems high for a 2-day stay. CGHS guideline allows 4 sessions/day max. Expected max: 8 sessions (₹3,600). Billed for 12 sessions.', confidence:84 },
+      { id:'L6', desc:'ICU Charges (per day)', code:'ICU-DAY', date:'12–14 Apr', qty:2, unitPrice:9500, total:19000, status:'ok', reason:'', confidence:95 },
+      { id:'L7', desc:'General Ward Charges', code:'WARD-GEN', date:'12–14 Apr', qty:2, unitPrice:3500, total:7000, status:'flag', reason:'Patient cannot be billed for both ICU (line 6) and General Ward on the same dates. These are mutually exclusive room types per CGHS billing rules.', confidence:91 },
+      { id:'L8', desc:'Surgeon Fee – Dr. R. Mehta', code:'SURG-001', date:'13 Apr', qty:1, unitPrice:25000, total:25000, status:'ok', reason:'', confidence:93 },
+      { id:'L9', desc:'Oxygen Charges', code:'PROC-O2', date:'12–14 Apr', qty:1, unitPrice:4800, total:4800, status:'flag', reason:'Oxygen is included in ICU day charges (bundled service per CGHS schedule). Should not be billed separately when ICU charges are present.', confidence:87 },
+      { id:'L10', desc:'Pharmacy & Consumables', code:'PHARM', date:'12–14 Apr', qty:1, unitPrice:18250, total:18250, status:'ok', reason:'', confidence:88 },
+    ]
+  },
+  US: {
+    provider: 'St. Mary Medical Center, Chicago IL',
+    patient: 'John Mitchell (M, 58)',
+    date: 'April 10, 2025',
+    invoiceNo: 'SMMC-2025-09871',
+    totalOriginal: 12840,
+    currency: '$',
+    lines: [
+      { id:'L1', desc:'Emergency Department Visit – Level 4', code:'CPT 99284', date:'Apr 10', qty:1, unitPrice:2100, total:2100, status:'ok', reason:'', confidence:97 },
+      { id:'L2', desc:'Comprehensive Metabolic Panel', code:'CPT 80053', date:'Apr 10', qty:1, unitPrice:485, total:485, status:'ok', reason:'', confidence:98 },
+      { id:'L3', desc:'Comprehensive Metabolic Panel', code:'CPT 80053', date:'Apr 10', qty:1, unitPrice:485, total:485, status:'dup', reason:'Exact duplicate of line 2 — same CPT code (80053), same date of service, same billed amount. Medicare allows one CMP per encounter.', confidence:99 },
+      { id:'L4', desc:'Basic Metabolic Panel', code:'CPT 80048', date:'Apr 10', qty:1, unitPrice:310, total:310, status:'flag', reason:'CPT 80048 (Basic Metabolic Panel) is a component of 80053 (Comprehensive Metabolic Panel) billed on the same date. CMS bundling rules prohibit separate billing when the comprehensive panel is also billed.', confidence:93 },
+      { id:'L5', desc:'12-Lead ECG with Interpretation', code:'CPT 93000', date:'Apr 10', qty:1, unitPrice:320, total:320, status:'ok', reason:'', confidence:96 },
+      { id:'L6', desc:'ECG Interpretation Only', code:'CPT 93010', date:'Apr 10', qty:1, unitPrice:180, total:180, status:'flag', reason:'CPT 93010 (ECG interpretation only) should not be billed alongside CPT 93000 (complete ECG) on the same date. 93000 already includes interpretation per CMS guidelines.', confidence:90 },
+      { id:'L7', desc:'Chest X-Ray, 2 Views', code:'CPT 71046', date:'Apr 10', qty:1, unitPrice:740, total:740, status:'ok', reason:'', confidence:94 },
+      { id:'L8', desc:'IV Infusion, Initial Hour', code:'CPT 96365', date:'Apr 10', qty:1, unitPrice:620, total:620, status:'ok', reason:'', confidence:92 },
+      { id:'L9', desc:'IV Infusion, Each Additional Hour', code:'CPT 96366', date:'Apr 10', qty:4, unitPrice:385, total:1540, status:'flag', reason:'4 additional infusion hours (CPT 96366) for a single ED visit is unusual. Medicare typical range: 1-2 additional hours. Recommend requesting itemized infusion log from provider.', confidence:78 },
+      { id:'L10', desc:'Emergency Physician Professional Fee', code:'CPT 99284-25', date:'Apr 10', qty:1, unitPrice:1850, total:1850, status:'ok', reason:'', confidence:95 },
+      { id:'L11', desc:'Facility Fee – Emergency', code:'Rev 0450', date:'Apr 10', qty:1, unitPrice:4210, total:4210, status:'ok', reason:'', confidence:91 },
+    ]
+  }
+};
+
+// ══════════════════════════════════════════
+//  RUN BILL AUDIT
+// ══════════════════════════════════════════
+async function runSampleBill() {
+  await runBillAudit('sample');
+}
+
+async function runBillAudit(mode, file) {
+  const mkt = currentMarket.bill;
+  const prog = document.getElementById('bill-progress');
+  const results = document.getElementById('bill-results');
+
+  // Reset
+  results.classList.remove('show');
+  results.innerHTML = '';
+  billDecisions = {};
+  ['step-ocr','step-codes','step-rates','step-dupes','step-report'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove('active','done');
+    el.querySelector('.prog-step-icon').textContent = ['👁️','🔍','📊','⚠️','📝'][['step-ocr','step-codes','step-rates','step-dupes','step-report'].indexOf(id)];
+  });
+  document.getElementById('bill-prog-bar').style.width = '0%';
+  prog.classList.add('show');
+
+  // Animate progress
+  await animateProgress(
+    ['step-ocr','step-codes','step-rates','step-dupes','step-report'],
+    'bill-prog-bar',
+    [900, 700, 800, 600, 500]
+  );
+
+  // Try Claude API, fallback to mock
+  let data = SAMPLE_BILLS[mkt];
+  if (file) {
+    showToast('🤖 Calling Claude AI…');
+    const aiResult = await callClaude(`You are a medical billing expert. Analyse this hospital bill upload for market: ${mkt}. 
+Return ONLY a JSON object with this exact structure (no markdown): 
+{"provider":"...","patient":"...","date":"...","invoiceNo":"...","totalOriginal":0,"currency":"₹ or $","lines":[{"id":"L1","desc":"...","code":"...","date":"...","qty":1,"unitPrice":0,"total":0,"status":"ok|dup|flag","reason":"...","confidence":95}]}
+Create 8-10 realistic line items appropriate for ${mkt === 'IN' ? 'India CGHS rates' : 'US Medicare rates'}. Include 1-2 duplicates and 2 flags.`);
+    if (aiResult && aiResult.lines) data = aiResult;
+    else showToast('Using sample data (API unavailable)');
+  }
+
+  await sleep(300);
+  prog.classList.remove('show');
+  renderBillResults(data, mkt);
+}
+
+// ══════════════════════════════════════════
+//  RENDER BILL RESULTS
+// ══════════════════════════════════════════
+function renderBillResults(data, mkt) {
+  const results = document.getElementById('bill-results');
+  const { currency } = data;
+
+  const dups = data.lines.filter(l => l.status === 'dup');
+  const flags = data.lines.filter(l => l.status === 'flag');
+  const ok = data.lines.filter(l => l.status === 'ok');
+
+  const dupSavings = dups.reduce((s,l) => s + l.total, 0);
+  const flagSavings = flags.reduce((s,l) => s + Math.floor(l.total * 0.4), 0);
+  const totalSavings = dupSavings + flagSavings;
+  const correctedTotal = data.totalOriginal - totalSavings;
+
+  const fmt = v => currency + v.toLocaleString();
+
+  results.innerHTML = `
+    <!-- Summary Banner -->
+    <div class="summary-banner savings">
+      <div>
+        <div class="banner-label">Audit Complete</div>
+        <div class="banner-title">${dups.length} duplicate${dups.length!==1?'s':''} found, ${flags.length} item${flags.length!==1?'s':''} flagged</div>
+        <div class="banner-sub">${data.provider} · ${data.date} · Invoice ${data.invoiceNo}</div>
+      </div>
+      <div class="banner-stat">
+        <div class="banner-num">${fmt(totalSavings)}</div>
+        <div class="banner-num-label">Potential savings</div>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>This analysis is for informational purposes only. Please consult a healthcare billing advocate or your insurer before disputing charges. Estimates are based on ${mkt==='IN'?'CGHS/NPPA':'Medicare'} published rate schedules.</span>
+    </div>
+
+    ${dups.length ? `
+    <div class="sect-header">
+      <div class="sect-title"><div class="sect-title-icon icon-red">🚫</div> Confirmed Duplicates</div>
+      <span class="count-badge badge-red">${dups.length} item${dups.length!==1?'s':''} · ${fmt(dupSavings)} overcharged</span>
+    </div>
+    <div class="line-items">${dups.map(l => lineCard(l, currency, 'dup')).join('')}</div>
+    ` : ''}
+
+    ${flags.length ? `
+    <div class="sect-header">
+      <div class="sect-title"><div class="sect-title-icon icon-amber">⚠️</div> Flagged for Review</div>
+      <span class="count-badge badge-amber">${flags.length} item${flags.length!==1?'s':''} need attention</span>
+    </div>
+    <div class="line-items">${flags.map(l => lineCard(l, currency, 'flag')).join('')}</div>
+    ` : ''}
+
+    <div class="sect-header">
+      <div class="sect-title"><div class="sect-title-icon icon-green">✓</div> Verified Items</div>
+      <span class="count-badge badge-green">${ok.length} items look correct</span>
+    </div>
+    <div class="line-items">${ok.map(l => lineCard(l, currency, 'ok')).join('')}</div>
+
+    <!-- Totals -->
+    <div class="totals-card">
+      <div class="totals-row">
+        <span class="t-label">Original billed total</span>
+        <span class="t-orig"></span>
+        <span class="t-new">${fmt(data.totalOriginal)}</span>
+      </div>
+      <div class="totals-row">
+        <span class="t-label">Duplicate charges removed</span>
+        <span class="t-orig"></span>
+        <span class="t-new" style="color:var(--red)">−${fmt(dupSavings)}</span>
+      </div>
+      <div class="totals-row">
+        <span class="t-label">Flagged overcharges (estimated)</span>
+        <span class="t-orig"></span>
+        <span class="t-new" style="color:var(--amber)">−${fmt(flagSavings)}</span>
+      </div>
+      <div class="totals-row total-final savings-row">
+        <span class="t-label">💰 Estimated corrected total</span>
+        <span class="t-orig">${fmt(data.totalOriginal)}</span>
+        <span class="t-new">${fmt(correctedTotal)}</span>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <button class="btn-dl primary" onclick="downloadReport('bill')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Corrected Bill
+      </button>
+      <button class="btn-dl secondary" onclick="showToast('📋 Dispute letter copied to clipboard!')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+        Copy Dispute Letter
+      </button>
+      <button class="btn-dl secondary" onclick="showToast('📤 Sharing link generated!')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share Report
+      </button>
+    </div>
+  `;
+
+  results.classList.add('show');
+  // animate confidence bars
+  setTimeout(() => {
+    document.querySelectorAll('.conf-bar').forEach(b => {
+      b.style.width = b.dataset.width + '%';
+    });
+  }, 200);
+}
+
+function lineCard(l, currency, type) {
+  const statusLabel = type==='dup' ? 'Duplicate' : type==='flag' ? 'Review needed' : 'Verified';
+  const statusClass = type==='dup' ? 'status-dup' : type==='flag' ? 'status-flag' : 'status-ok';
+  const flagClass = type==='dup' ? 'flag-red' : type==='flag' ? 'flag-amber' : 'flag-green';
+  const confClass = l.confidence >= 90 ? 'conf-high' : 'conf-med';
+  const amountClass = type==='dup' ? 'line-amount struck' : 'line-amount';
+
+  return `
+  <div class="line-card" id="card-${l.id}">
+    <div class="line-card-header" onclick="toggleDetail('${l.id}')">
+      <div class="line-flag ${flagClass}"></div>
+      <div class="line-info">
+        <div class="line-desc">${l.desc}</div>
+        <div class="line-meta">${l.code} · ${l.date} · Qty: ${l.qty}</div>
+      </div>
+      <div class="${amountClass}">${currency}${l.total.toLocaleString()}</div>
+      <span class="line-status ${statusClass}">${statusLabel}</span>
+    </div>
+    ${type !== 'ok' ? `
+    <div class="line-card-detail" id="detail-${l.id}">
+      <div class="detail-grid">
+        <div class="detail-item"><label>Procedure Code</label><span>${l.code}</span></div>
+        <div class="detail-item"><label>Date of Service</label><span>${l.date}</span></div>
+        <div class="detail-item"><label>Qty × Unit Price</label><span>${l.qty} × ${currency}${l.unitPrice.toLocaleString()}</span></div>
+        <div class="detail-item"><label>Billed Total</label><span>${currency}${l.total.toLocaleString()}</span></div>
+      </div>
+      <div class="detail-reason ${type==='dup'?'reason-red':''}">
+        <strong>${type==='dup'?'⛔ Why this is a duplicate:':'⚠️ Why this needs review:'}</strong><br/>
+        ${l.reason}
+      </div>
+      <div class="confidence-row">
+        <span class="conf-label">AI Confidence</span>
+        <div class="conf-bar-wrap"><div class="conf-bar ${confClass}" data-width="${l.confidence}" style="width:0%"></div></div>
+        <span class="conf-pct">${l.confidence}%</span>
+      </div>
+      <div class="action-row">
+        ${type==='dup' ? `
+          <button class="act-btn act-accept" onclick="markDecision('${l.id}','removed',this)">Remove from bill</button>
+          <button class="act-btn act-neutral" onclick="markDecision('${l.id}','kept',this)">Keep (I'll verify)</button>
+        ` : `
+          <button class="act-btn act-accept" onclick="markDecision('${l.id}','dispute',this)">Add to dispute</button>
+          <button class="act-btn act-neutral" onclick="markDecision('${l.id}','kept',this)">Accept charge</button>
+        `}
+      </div>
+    </div>` : ''}
+  </div>`;
+}
+
+function toggleDetail(id) {
+  const d = document.getElementById('detail-' + id);
+  if (!d) return;
+  d.classList.toggle('open');
+  if (d.classList.contains('open')) {
+    setTimeout(() => {
+      d.querySelectorAll('.conf-bar').forEach(b => b.style.width = b.dataset.width + '%');
+    }, 100);
+  }
+}
+
+function markDecision(id, decision, btn) {
+  billDecisions[id] = decision;
+  const row = btn.closest('.action-row');
+  row.innerHTML = `<span style="font-size:13px;color:var(--green);font-weight:600">✓ ${decision==='removed'||decision==='dispute' ? 'Marked for removal' : 'Kept on bill'}</span>`;
+  showToast(decision==='removed'||decision==='dispute' ? '✅ Added to corrected bill' : '📌 Item retained');
+}
+
+// ══════════════════════════════════════════
+//  INSURANCE EXPLAINER — SAMPLE DATA
+// ══════════════════════════════════════════
+const SAMPLE_INS = {
+  IN: {
+    policyName: 'Star Health Comprehensive — Family Floater',
+    insurer: 'Star Health and Allied Insurance',
+    sumInsured: '₹10,00,000',
+    deductible: '₹10,000',
+    deductibleUsed: 4200,
+    deductibleTotal: 10000,
+    oop: '₹1,20,000',
+    oopUsed: 18500,
+    oopTotal: 120000,
+    networkStatus: 'Apollo, Fortis, Manipal — In-Network',
+    patient: 'Priya Sharma',
+    conditions: ['Type 2 Diabetes (E11)', 'Hypertension (I10)', 'Knee Osteoarthritis (M17.1)'],
+    coverageItems: [
+      { condition: 'Hospitalisation (Diabetes complications)', status: 'covered', desc: 'Inpatient treatment for diabetes complications is fully covered after your ₹10,000 deductible. Pre-existing conditions covered after 36-month waiting period — which you have already completed.', oop: '₹10,000 deductible applies', oopVal: '₹10,000' },
+      { condition: 'Knee Replacement Surgery', status: 'covered', desc: 'Total/partial knee replacement (osteoarthritis) is covered under the orthopaedic surgical benefit. Your policy covers up to ₹3,50,000 per knee. A prior authorisation form must be submitted 7 days in advance.', oop: 'Estimated out-of-pocket', oopVal: '₹18,000–32,000' },
+      { condition: 'Hypertension Medication (outpatient)', status: 'partial', desc: 'Outpatient pharmacy for chronic conditions is covered at 50% under your OPD benefit rider, up to ₹10,000/year. Annual OPD limit is ₹10,000. You may have already used a portion of this.', oop: 'Estimated share (50%)', oopVal: '₹2,400–4,800/yr' },
+      { condition: 'Diabetic Eye Screening', status: 'auth', desc: 'Ophthalmology consultations related to diabetes are covered but require prior authorisation from your insurer. Submit a referral letter from your primary physician.', oop: 'After auth — covered at', oopVal: '80% of charges' },
+      { condition: 'Alternative / Ayurvedic Treatment', status: 'not', desc: 'AYUSH and alternative medicine treatments are excluded under your current base plan. You would need to add the optional AYUSH rider (available at renewal) to access this benefit.', oop: 'Exclusion — out of pocket', oopVal: '100%' },
+    ],
+    nextSteps: [
+      { text: '<strong>Get pre-authorisation for knee surgery.</strong> Call Star Health on 1800-425-2255 at least 7 days before any planned procedure. Have your orthopaedic surgeon\'s letter ready.' },
+      { text: '<strong>Check your waiting period status.</strong> Log into Star Health portal to confirm the 36-month waiting period for diabetes has been completed — this unlocks full inpatient coverage.' },
+      { text: '<strong>Track your OPD limit.</strong> You have an annual OPD benefit of ₹10,000. Request a benefits utilisation statement so you know how much is remaining this year.' },
+      { text: '<strong>Use in-network hospitals.</strong> Apollo, Fortis, and Manipal are in-network — using them means cashless hospitalisation and no out-of-pocket payment at discharge.' },
+    ]
+  },
+  US: {
+    policyName: 'Blue Cross Blue Shield — PPO Gold Plan',
+    insurer: 'BCBS Illinois',
+    sumInsured: '$1,000,000 lifetime',
+    deductible: '$1,500 individual',
+    deductibleUsed: 840,
+    deductibleTotal: 1500,
+    oop: '$5,000 individual',
+    oopUsed: 1240,
+    oopTotal: 5000,
+    networkStatus: 'St. Mary, Northwestern, Rush — In-Network',
+    patient: 'John Mitchell',
+    conditions: ['Type 2 Diabetes (E11.9)', 'Coronary Artery Disease (I25.10)', 'Chronic Kidney Disease Stage 2 (N18.2)'],
+    coverageItems: [
+      { condition: 'Emergency Department Visit (CAD)', status: 'covered', desc: 'Emergency visits are covered under your plan with a $350 copay after deductible is met. Your deductible is $840/$1,500 used — you will owe the remaining $660 deductible first, then $350 copay.', oop: 'Your estimated share', oopVal: '$660 + $350 = $1,010' },
+      { condition: 'Cardiac Catheterisation', status: 'auth', desc: 'Cardiac cath procedures require pre-authorisation. BCBS requires notification within 24 hours for emergency procedures. For planned procedures, submit at least 5 business days in advance via the provider portal.', oop: 'After auth — 20% coinsurance', oopVal: 'Est. $800–2,200' },
+      { condition: 'CKD Nephrology Follow-up', status: 'covered', desc: 'Specialist visits for chronic kidney disease are covered at 20% coinsurance after deductible. Ensure your nephrologist is in-network (Northwestern Nephrology is in-network for your plan).', oop: '20% coinsurance after deductible', oopVal: '~$60–120 per visit' },
+      { condition: 'Diabetes CGM (Continuous Glucose Monitor)', status: 'partial', desc: 'CGM devices are covered as durable medical equipment (DME) at 20% after deductible under your plan. However, coverage requires a prior diabetes management plan on file and an A1C above 7.5%.', oop: '20% of allowed DME amount', oopVal: '~$150–280/month' },
+      { condition: 'Bariatric Surgery (weight management)', status: 'not', desc: 'Bariatric and weight-loss surgical procedures are excluded from your current Gold plan. This is a plan-level exclusion, not a medical one. You may appeal if your physician documents medical necessity for diabetes management.', oop: 'Excluded — appeal option available', oopVal: '100% if not appealed' },
+    ],
+    nextSteps: [
+      { text: '<strong>Meet your deductible first.</strong> You have $660 remaining on your $1,500 deductible this year. Once met, you only pay 20% coinsurance on most services.' },
+      { text: '<strong>Pre-authorise the cardiac cath.</strong> Call BCBS at 1-800-252-8039. For emergency procedures already done, notify within 24 hours to avoid a claim denial.' },
+      { text: '<strong>File an appeal for bariatric coverage.</strong> Ask your endocrinologist to write a letter of medical necessity linking your BMI to your Type 2 Diabetes. BCBS has a 60-day appeal window.' },
+      { text: '<strong>Out-of-Pocket Max tracker.</strong> You\'ve used $1,240 of your $5,000 OOP max. After $3,760 more in covered costs, BCBS pays 100% for the rest of the year.' },
+    ]
+  }
+};
+
+// ══════════════════════════════════════════
+//  RUN INSURANCE EXPLAINER
+// ══════════════════════════════════════════
+async function runSampleInsurance() {
+  await runInsuranceExplainer('sample');
+}
+
+async function runInsuranceExplainer(mode) {
+  const mkt = currentMarket.ins;
+  const prog = document.getElementById('ins-progress');
+  const results = document.getElementById('ins-results');
+
+  results.classList.remove('show');
+  results.innerHTML = '';
+  ['ins-step-1','ins-step-2','ins-step-3','ins-step-4','ins-step-5'].forEach((id,i) => {
+    const el = document.getElementById(id);
+    el.classList.remove('active','done');
+    el.querySelector('.prog-step-icon').textContent = ['📄','🔎','🩺','🔗','💬'][i];
+  });
+  document.getElementById('ins-prog-bar').style.width = '0%';
+  prog.classList.add('show');
+
+  await animateProgress(
+    ['ins-step-1','ins-step-2','ins-step-3','ins-step-4','ins-step-5'],
+    'ins-prog-bar',
+    [800, 900, 700, 800, 600]
+  );
+
+  await sleep(300);
+  prog.classList.remove('show');
+  renderInsResults(SAMPLE_INS[mkt], mkt);
+}
+
+// ══════════════════════════════════════════
+//  RENDER INSURANCE RESULTS
+// ══════════════════════════════════════════
+function renderInsResults(data, mkt) {
+  const results = document.getElementById('ins-results');
+  const curr = mkt === 'IN' ? '₹' : '$';
+
+  const coveredCount = data.coverageItems.filter(c => c.status === 'covered').length;
+  const totalItems = data.coverageItems.length;
+  const coverageScore = Math.round((coveredCount / totalItems) * 100);
+
+  const deductPct = Math.round((data.deductibleUsed / data.deductibleTotal) * 100);
+  const oopPct = Math.round((data.oopUsed / data.oopTotal) * 100);
+
+  results.innerHTML = `
+    <div class="summary-banner insight">
+      <div>
+        <div class="banner-label">Policy Analysis Complete</div>
+        <div class="banner-title">${data.policyName}</div>
+        <div class="banner-sub">${data.insurer} · Patient: ${data.patient}</div>
+      </div>
+      <div class="banner-stat">
+        <div class="banner-num">${coverageScore}%</div>
+        <div class="banner-num-label">Coverage score</div>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>This is an AI-generated interpretation of your policy language. Always confirm coverage with your insurer before receiving care. Out-of-pocket estimates are approximations based on published rate schedules and may vary.</span>
+    </div>
+
+    <!-- Your conditions -->
+    <div class="sect-header">
+      <div class="sect-title"><div class="sect-title-icon icon-teal">🩺</div> Your Conditions & Coverage</div>
+    </div>
+    <div class="policy-grid">
+      ${data.coverageItems.map(item => coverageCard(item)).join('')}
+    </div>
+
+    <!-- Policy Limits -->
+    <div class="limits-card">
+      <div class="limits-title"><div class="sect-title-icon icon-teal" style="display:inline-flex">📊</div> Your Policy Limits at a Glance</div>
+      <div class="limit-rows">
+        <div class="limit-row">
+          <span class="limit-label">Deductible Used</span>
+          <div class="limit-bar-wrap">
+            <div class="limit-bar-fill" style="background:var(--teal);width:0%" data-width="${deductPct}"></div>
+          </div>
+          <span class="limit-vals">${curr}${data.deductibleUsed.toLocaleString()} / ${curr}${data.deductibleTotal.toLocaleString()}</span>
+        </div>
+        <div class="limit-row">
+          <span class="limit-label">Out-of-Pocket Used</span>
+          <div class="limit-bar-wrap">
+            <div class="limit-bar-fill" style="background:var(--amber);width:0%" data-width="${oopPct}"></div>
+          </div>
+          <span class="limit-vals">${curr}${data.oopUsed.toLocaleString()} / ${curr}${data.oopTotal.toLocaleString()}</span>
+        </div>
+      </div>
+      <div style="margin-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+        ${[
+          ['Sum Insured', data.sumInsured],
+          ['Deductible', data.deductible],
+          ['Network Hospitals', data.networkStatus]
+        ].map(([label,val]) => `
+          <div style="background:var(--bg);border-radius:8px;padding:12px 14px">
+            <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">${label}</div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink)">${val}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- Diagnoses -->
+    <div style="background:white;border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:24px">
+      <div class="sect-title" style="margin-bottom:14px"><div class="sect-title-icon icon-teal" style="display:inline-flex">📋</div> Conditions on File (from Medical Records)</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        ${data.conditions.map(c => `<span style="background:var(--teal-light);color:var(--teal);font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px">${c}</span>`).join('')}
+      </div>
+    </div>
+
+    <!-- Next Steps -->
+    <div class="steps-card">
+      <div class="steps-title">Your Recommended Next Steps</div>
+      <div class="step-items">
+        ${data.nextSteps.map((s,i) => `
+          <div class="step-item">
+            <div class="step-num">${i+1}</div>
+            <div class="step-text">${s.text}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <button class="btn-dl primary" onclick="downloadReport('insurance')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Coverage Summary
+      </button>
+      <button class="btn-dl secondary" onclick="showToast('📞 Insurer contact details copied!')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .84h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        Call My Insurer
+      </button>
+    </div>
+  `;
+
+  results.classList.add('show');
+  setTimeout(() => {
+    document.querySelectorAll('.limit-bar-fill').forEach(b => {
+      b.style.transition = 'width 1.2s ease';
+      b.style.width = b.dataset.width + '%';
+    });
+  }, 200);
+}
+
+function coverageCard(item) {
+  const statusLabels = { covered:'✓ Covered', partial:'Partially Covered', not:'Not Covered', auth:'Needs Prior Auth' };
+  const statusClasses = { covered:'cov-covered', partial:'cov-partial', not:'cov-not', auth:'cov-auth' };
+  return `
+  <div class="coverage-card">
+    <div class="cov-header">
+      <div class="cov-title">${item.condition}</div>
+      <span class="cov-status ${statusClasses[item.status]}">${statusLabels[item.status]}</span>
+    </div>
+    <div class="cov-desc">${item.desc}</div>
+    <div class="cov-estimate">
+      <span class="cov-est-label">${item.oop}</span>
+      <span class="cov-est-val">${item.oopVal}</span>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+//  UTILITIES
+// ══════════════════════════════════════════
+function downloadReport(type) {
+  showToast('📥 Generating PDF report…');
+  setTimeout(() => showToast('✅ Report ready — check Downloads'), 1800);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
